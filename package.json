@@ -1,0 +1,11 @@
+{
+  "name": "Big-Red-Liqours",
+  "version": "1.0.0",
+  "description": "Upload script",
+  "main": "index.js",
+  "author": "Peter Manca",
+  "license": "MIT",
+  "dependencies": {
+    "hubspot-api-wrapper": "^0.4.2"
+  }
+}
