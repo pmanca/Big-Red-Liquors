@@ -12,10 +12,10 @@ var contactMap = new Map()
 var deals = []
 const csvFilePath = './deals/BRLDeals.csv'
 var brlHapiKey = "0ddfd73a-8cc0-42a2-8d57-cd61a3916285"
-var testHapiKey = "91b73688-6df5-4168-be16-097240fdb309"
+var testHapiKey = "46cc0330-4a77-4ddd-9674-71fdc5767e01"
 
 //initialize wrapper
-var initiated = hubspot.init({type: "hapikey",value: testHapiKey})
+var initiated = hubspot.init({type: "hapikey",value: brlHapiKey})
 console.log("API Wrapper was initiated: " + initiated)
 
 
@@ -225,6 +225,7 @@ async function createDeals(){
 		await hubspot.deal.create(properties).then(response => {
 			console.log(response)
 			console.log(contactMap.get(deals[i]["Customer ID"]))
+			console.log("Created Deal: " + i)
 			
 		}).catch(err => {
 			console.log(err)
