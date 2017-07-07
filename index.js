@@ -5,14 +5,17 @@
 //bring in dependencies
 var hubspot = require('hubspot-api-wrapper')
 var ctj = require('csvtojson')
+var fs = require('fs')
+var Log = require('log')
+  , log = new Log('info', fs.createWriteStream('my.log'));
 
 
 //set up map and wrapper
 var contactMap = new Map()
 var deals = []
-const csvFilePath = './deals/BRLDeals.csv'
+const csvFilePath = './deals/BRL2.csv'
 var brlHapiKey = "0ddfd73a-8cc0-42a2-8d57-cd61a3916285"
-var testHapiKey = "46cc0330-4a77-4ddd-9674-71fdc5767e01"
+var testHapiKey = "3cd56db7-201e-4b8b-b041-07c409b85a02"
 
 //initialize wrapper
 var initiated = hubspot.init({type: "hapikey",value: brlHapiKey})
@@ -29,6 +32,7 @@ console.time("get contacts")
 hubspot.contact.getAll(["customer_id","firstname","lastname"]).then(response => {
 	//console.log(response[0])
 	//console.log(response.length)
+	log.info("filling in map")
 	let i
 	for(i = 0; i < response.length; i++ ){
 		if(response[i].properties.hasOwnProperty("customer_id")){
@@ -53,9 +57,12 @@ function addDealstoMem(){
 	.fromFile(csvFilePath)
 	.on('json',(jsonObj)=>{
     	deals.push(jsonObj)
+    	log.info(jsonObj)
 	})
 	.on('done',(error)=>{
     	console.log('end: pushed ' + deals.length + " deals") 
+    	log.info("There are: " + deals.length + " deals");
+    	console.log(deals[0])
     	createDeals()   	
 	})
 }
@@ -65,6 +72,7 @@ async function createDeals(){
 	console.log("Creating " + deals.length + " deals")
 	let i
 	for(i = 0; i < deals.length; i++){
+		//log.info(deals[i])
 		if(deals[i]["Customer ID"]){
 			var properties = {
 					"associations": {
@@ -220,16 +228,23 @@ async function createDeals(){
 
 	  }
 		
+		for(var x = 0; x < 100000; x++){}
 
-	  	
-		await hubspot.deal.create(properties).then(response => {
-			console.log(response)
-			console.log(contactMap.get(deals[i]["Customer ID"]))
+	  	//log.info(properties)
+	  
+	  	await hubspot.deal.create(properties).then(response => {
+			log.info("Deal: " + i + "  "  )
+			log.info(response)
+			//console.log(contactMap.get(deals[i]["Customer ID"]))
 			console.log("Created Deal: " + i)
 			
 		}).catch(err => {
+			log.info("Deal Error: " + i + "  "  )
+			log.info(err)
 			console.log(err)
 		})
+	  
+		
 	  
 		
 	}//end of for loop

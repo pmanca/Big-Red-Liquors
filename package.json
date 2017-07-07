@@ -7,6 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "csvtojson": "^1.1.7",
-    "hubspot-api-wrapper": "^0.4.2"
+    "hubspot-api-wrapper": "^0.4.2",
+    "log": "^1.4.0"
   }
 }
