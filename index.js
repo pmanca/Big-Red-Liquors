@@ -1,8 +1,9 @@
 //Peter Manca
 //Upload script for Big Red Liquors
 
-//updates:
-//26045 done
+//updates not cumlative:
+//26045 6/10
+//10761 6/11
 
 //bring in dependencies
 var hubspot = require('hubspot-api-wrapper')
