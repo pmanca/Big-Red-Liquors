@@ -1,6 +1,8 @@
 //Peter Manca
 //Upload script for Big Red Liquors
 
+//updates:
+//26045 done
 
 //bring in dependencies
 var hubspot = require('hubspot-api-wrapper')
@@ -15,7 +17,7 @@ var Log = require('log')
 var contactMap = new Map()
 var deals = []
 
-const csvFilePath = './deals/BRL2.csv'
+const csvFilePath = './deals/BRL2current.csv'
 var brlHapiKey = "0ddfd73a-8cc0-42a2-8d57-cd61a3916285"
 var testHapiKey = "123802f0-09fe-416f-893d-9206c0ae752c"
 
