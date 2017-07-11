@@ -6,6 +6,7 @@
 var hubspot = require('hubspot-api-wrapper')
 var ctj = require('csvtojson')
 var fs = require('fs')
+var moment = require('moment')
 var Log = require('log')
   , log = new Log('info', fs.createWriteStream('my.log'));
 
@@ -13,9 +14,10 @@ var Log = require('log')
 //set up map and wrapper
 var contactMap = new Map()
 var deals = []
+
 const csvFilePath = './deals/BRL2.csv'
 var brlHapiKey = "0ddfd73a-8cc0-42a2-8d57-cd61a3916285"
-var testHapiKey = "3cd56db7-201e-4b8b-b041-07c409b85a02"
+var testHapiKey = "123802f0-09fe-416f-893d-9206c0ae752c"
 
 //initialize wrapper
 var initiated = hubspot.init({type: "hapikey",value: brlHapiKey})
@@ -72,8 +74,20 @@ async function createDeals(){
 	console.log("Creating " + deals.length + " deals")
 	let i
 	for(i = 0; i < deals.length; i++){
+		//var ts = moment(deals[i]["Trans Date"], "MM/DD/YY").valueOf()
+		var t2;
+		// //if(deals[i]["Trans Date"]){
+			t2 = moment.utc(deals[i]["Trans Date"])
+			//t2 = t2.add(-4,"hours")
+			t2 = t2.valueOf()
+	
+		// 	log.info("M: " + t2)
+		//}
+		
+
 		//log.info(deals[i])
 		if(deals[i]["Customer ID"]){
+			
 			var properties = {
 					"associations": {
 					    "associatedVids": [
@@ -86,7 +100,7 @@ async function createDeals(){
 				      "name": "dealstage"
 				    },
 				    {
-				      "value": deals[i]["Trans Date"],
+				      "value": t2,
 				      "name": "trans_date"
 				    },
 				    {
@@ -160,7 +174,7 @@ async function createDeals(){
 			      "name": "dealstage"
 			    },
 			    {
-			      "value": deals[i]["Trans Date"],
+			      "value": t2,
 			      "name": "trans_date"
 			    },
 			    {
@@ -240,7 +254,11 @@ async function createDeals(){
 			
 		}).catch(err => {
 			log.info("Deal Error: " + i + "  "  )
-			log.info(err)
+			//log.info(err)
+			
+			log.info(err.response.data.validationResults)	
+			
+			
 			console.log(err)
 		})
 	  
@@ -250,6 +268,7 @@ async function createDeals(){
 	}//end of for loop
 	
 }
+
 
 
 
